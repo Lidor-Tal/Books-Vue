@@ -10,12 +10,12 @@ export default {
     `,
     data() {
         return {
-            filterBy: { name: '', price: 0 },
+            filterBy: { title: '' },
         }
     },
     methods: {
         filter(){
-            this.$emit('filter', this.filterBy)
+            this.$emit('filter', {...this.filterBy})
         }
     }
 }

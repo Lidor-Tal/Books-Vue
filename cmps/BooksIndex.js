@@ -1,22 +1,21 @@
 import { bookService } from '../services/book.service.js'
-
 import BookList from './BookList.js'
 import BookFilter from './BookFilter.js'
 
 
 import BookDetails from './BookDetails.js'
-// import BookEdit from './BookEdit.js'
+import BookEdit from './BookEdit.js'
 
 export default {
     template: `
         <section class="book-index">
             <BookFilter @filter="setFilterBy"/>
             <BookList 
-                :books="books" 
+                :books="filteredBooks" 
                 v-if="books"
                 @remove="removeBook" 
                 @show-details="showBookDetails" />
-            <!-- <BookEdit @book-saved="onSaveBook"/> -->
+            <BookEdit @book-saved="onSaveBook"/>
             <BookDetails 
                 v-if="selectedBook" 
                 @hide-details="selectedBook = null"
@@ -34,14 +33,14 @@ export default {
         removeBook(bookId) {
             bookService.remove(bookId)
                 .then(() => {
-                    const idx = this.books.findIndex(book => book.id === carId)
+                    const idx = this.books.findIndex(book => book.id === bookId)
                     this.books.splice(idx, 1)
                 })
         },
         showBookDetails(bookId) {
             this.selectedBook = this.books.find(book => book.id === bookId)
         },
-        onSaveCar(newBook) {
+        onSaveBook(newBook) {
             this.books.push(newBook)
         },
         setFilterBy(filterBy) {
@@ -51,7 +50,7 @@ export default {
     computed: {
         filteredBooks() {
             const regex = new RegExp(this.filterBy.name, 'i')
-            return this.books.filter(book => regex.test(book.name))
+           return this.books.filter(book => regex.test(book.name))
         }
     },
     created() {
@@ -62,6 +61,6 @@ export default {
         BookFilter,
         BookList,
         BookDetails,
-        // BookEdit,
+        BookEdit,
     }
 }
